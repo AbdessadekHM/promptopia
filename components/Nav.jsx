@@ -6,18 +6,21 @@ import { useState, useEffect } from "react"
 import {signIn, signOut, useSession, getProviders} from 'next-auth/react'
 
 const Nav = () => {
-  const isUserLoggedIn = true;
+  const isUserLoggedIn = false;
+  const {data: session} = useSession();
 
   const [providers, setProviders] = useState(null);
   const [toggleDropDown, setToggleDropDown] = useState(false);
 
   useEffect(()=>{
-    const setProviders = async ()=>{
+    const setAppProviders = async ()=>{
       const response = await getProviders();
       setProviders(response)
+      console.log(response)
+      console.log(session)
     }
 
-    setProviders();
+    setAppProviders();
   },[])
   return (
     <nav className="w-full pt-3 mb-16 flex-between">
@@ -35,7 +38,7 @@ const Nav = () => {
       </Link> 
       {/* Desktop Navigation */}
       <div className="hidden sm:flex">
-        {isUserLoggedIn ? (
+        {session?.user ? (
           <div className="flex gap-3 md:gap-5">
             <Link href="/create-prompt" className="black_btn">
               Create Post
@@ -47,7 +50,7 @@ const Nav = () => {
 
             <Link href="/profile">
               <Image
-                src="/assets/images/logo.svg" 
+                src={session?.user.image} 
                 width={37}
                 height={37}
                 className="rounded-full"
@@ -69,17 +72,17 @@ const Nav = () => {
                 onClick={()=> signIn(provider.id)}
                 className="black_btn" 
               >
-
+                {provider.name}
               </button>
             ))}
           </>
         )}
       </div>
       <div className="relative flex sm:hidden">
-       {isUserLoggedIn ? (
+       {session?.user ? (
           <div className="flex">
             <Image
-              src="/assets/images/logo.svg" 
+              src={session?.user.image} 
               width={37}
               height={37}
               className="rounded-full"
@@ -130,7 +133,7 @@ const Nav = () => {
                 onClick={()=> signIn(provider.id)}
                 className="black_btn" 
               >
-
+                Sign IN
               </button>
             ))}
           </>
