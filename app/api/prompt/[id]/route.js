@@ -1,5 +1,5 @@
-import { connectToDB } from "@/utils/database";
 import Prompt from "@/models/prompt";
+import { connectToDB } from "@/utils/database";
 
 //Read
 export const GET = async (request, { params }) => {
@@ -11,15 +11,21 @@ export const GET = async (request, { params }) => {
         return new Response("Prompt not found", { status: 404 });
 
        }
-       return new Response(JSON.stringify(prompts),{ status: 200 });
+       return new Response(JSON.stringify(prompt),{ status: 200 });
     } catch (error) {
        console.log(error);
-       return new Response("Failed to fetch all prompts", { status: 500 });
+       console.log("this is the id", params.id)
+       const errMessage = {
+        message: "failed to fetch the post",
+        prompt: params.id,
+        tag: typeof params.id, 
+       }
+       return new Response(JSON.stringify(errMessage), { status: 500 });
     }
 }
 //Update
 export const PATCH = async (request, { params }) => {
-    const { prompt, tag } = await request.jsong();
+    const { prompt, tag } = await request.json();
 
     try {
        await connectToDB();
