@@ -30,6 +30,10 @@ const Feed = () => {
   }
   const handleTagClick = (tag) => {
     setSearchText(tag);
+    const filteredPost = posts.filter((post) => (
+      post.creator.username.includes(tag) || post.tag.includes(tag)
+    ))
+    setPosts(filteredPost)
   }
   useEffect(()=>{
     const fetchPosts = async ()=>{
