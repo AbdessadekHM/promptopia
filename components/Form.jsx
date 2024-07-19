@@ -1,7 +1,16 @@
 import Link from 'next/link'
+import { useEffect } from 'react'
 
 
 const Form = ({type, post, setPost, submitting, handleSubmit}) => {
+  useEffect(() => {
+    if(type == "Update"){
+      console.log({
+        prompt: post.prompt,
+        tag: post.tag
+      })
+    }
+  },[])
   return (
     <section className="flex-col w-full max-w-full flex-start">
       <h1 className='text-left head_text'>
